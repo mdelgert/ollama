@@ -1,0 +1,134 @@
+@baseUrl = http://localhost:11434
+#llama3.2:1b, llama3.2:3b,deepseek-v2:16b, qwen3:4b, qwen3:8b, gemma3:4b
+@model = qwen3:4b
+
+### Health/version check
+GET {{baseUrl}}/
+
+### List local models
+GET {{baseUrl}}/api/tags
+
+### Show model details
+POST {{baseUrl}}/api/show
+Content-Type: application/json
+
+{
+  "name": "{{model}}"
+}
+
+### Pull model from registry
+POST {{baseUrl}}/api/pull
+Content-Type: application/json
+
+{
+  "name": "{{model}}",
+  "stream": false
+}
+
+### Push model to registry
+POST {{baseUrl}}/api/push
+Content-Type: application/json
+
+{
+  "name": "{{model}}",
+  "stream": false
+}
+
+### Create model from Modelfile
+POST {{baseUrl}}/api/create
+Content-Type: application/json
+
+{
+  "name": "my-custom-model",
+  "path": "./Modelfile",
+  "stream": false
+}
+
+### Copy model
+POST {{baseUrl}}/api/copy
+Content-Type: application/json
+
+{
+  "source": "{{model}}",
+  "destination": "llama3.1-copy"
+}
+
+### Delete model
+DELETE {{baseUrl}}/api/delete
+Content-Type: application/json
+
+{
+  "name": "llama3.1-copy"
+}
+
+### Generate text (non-streaming)
+POST {{baseUrl}}/api/generate
+Content-Type: application/json
+
+{
+  "model": "{{model}}",
+  "prompt": "Write a short haiku about inference.",
+  "stream": false
+}
+
+### Generate text (streaming)
+POST {{baseUrl}}/api/generate
+Content-Type: application/json
+
+{
+  "model": "{{model}}",
+  "prompt": "Count from 1 to 5.",
+  "stream": true
+}
+
+### Chat completion (non-streaming)
+POST {{baseUrl}}/api/chat
+Content-Type: application/json
+
+{
+  "model": "{{model}}",
+  "messages": [
+    { "role": "system", "content": "You are concise." },
+    { "role": "user", "content": "What is Ollama in one sentence?" }
+  ],
+  "stream": false
+}
+
+### Chat completion (streaming)
+POST {{baseUrl}}/api/chat
+Content-Type: application/json
+
+{
+  "model": "{{model}}",
+  "messages": [
+    { "role": "user", "content": "Give me 3 bullet points about GPU inference." }
+  ],
+  "stream": true
+}
+
+### Embeddings (single input)
+POST {{baseUrl}}/api/embeddings
+Content-Type: application/json
+
+{
+  "model": "{{model}}",
+  "prompt": "The quick brown fox jumps over the lazy dog."
+}
+
+### Embeddings (batch input)
+POST {{baseUrl}}/api/embed
+Content-Type: application/json
+
+{
+  "model": "{{model}}",
+  "input": [
+    "First document",
+    "Second document"
+  ]
+}
+
+### List running models
+GET {{baseUrl}}/api/ps
+
+### Raw REST API docs endpoint (if enabled by your Ollama version/build)
+GET {{baseUrl}}/api
