@@ -1,6 +1,6 @@
 @baseUrl = http://localhost:11434
-#llama3.2:1b, llama3.2:3b,deepseek-v2:16b, qwen3:4b, qwen3:8b, gemma3:4b
-@model = qwen3:4b
+#llama3.2:1b, llama3.2:3b,deepseek-v2:16b, qwen3:4b, qwen3:8b, qwen2.5-coder:7b, gemma3:4b
+@model = qwen2.5-coder:7b
 
 ### Health/version check
 GET {{baseUrl}}/
@@ -71,6 +71,32 @@ Content-Type: application/json
   "stream": false
 }
 
+### Quick response: hello
+POST {{baseUrl}}/api/generate
+Content-Type: application/json
+
+{
+  "model": "{{model}}",
+  "prompt": "Say hello in one short sentence.",
+  "stream": false,
+  "options": {
+    "num_predict": 16
+  }
+}
+
+### Quick response: simple question
+POST {{baseUrl}}/api/generate
+Content-Type: application/json
+
+{
+  "model": "{{model}}",
+  "prompt": "What is 2 + 2? Answer with only the number.",
+  "stream": false,
+  "options": {
+    "num_predict": 8
+  }
+}
+
 ### Generate text (streaming)
 POST {{baseUrl}}/api/generate
 Content-Type: application/json
@@ -92,6 +118,21 @@ Content-Type: application/json
     { "role": "user", "content": "What is Ollama in one sentence?" }
   ],
   "stream": false
+}
+
+### Quick chat response
+POST {{baseUrl}}/api/chat
+Content-Type: application/json
+
+{
+  "model": "{{model}}",
+  "messages": [
+    { "role": "user", "content": "Hello! How are you?" }
+  ],
+  "stream": false,
+  "options": {
+    "num_predict": 16
+  }
 }
 
 ### Chat completion (streaming)
