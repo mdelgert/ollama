@@ -1,16 +1,20 @@
 @baseUrl = http://localhost:11434
+@authorization = Bearer {{$dotenv OLLAMA_API_KEY}}
 #llama3.2:1b, llama3.2:3b,deepseek-v2:16b, qwen3:4b, qwen3:8b, qwen2.5-coder:7b, gemma3:4b
 @model = qwen2.5-coder:7b
 
 ### Health/version check
 GET {{baseUrl}}/
+Authorization: {{authorization}}
 
 ### List local models
 GET {{baseUrl}}/api/tags
+Authorization: {{authorization}}
 
 ### Show model details
 POST {{baseUrl}}/api/show
 Content-Type: application/json
+Authorization: {{authorization}}
 
 {
   "name": "{{model}}"
@@ -19,6 +23,7 @@ Content-Type: application/json
 ### Pull model from registry
 POST {{baseUrl}}/api/pull
 Content-Type: application/json
+Authorization: {{authorization}}
 
 {
   "name": "{{model}}",
@@ -28,6 +33,7 @@ Content-Type: application/json
 ### Push model to registry
 POST {{baseUrl}}/api/push
 Content-Type: application/json
+Authorization: {{authorization}}
 
 {
   "name": "{{model}}",
@@ -37,6 +43,7 @@ Content-Type: application/json
 ### Create model from Modelfile
 POST {{baseUrl}}/api/create
 Content-Type: application/json
+Authorization: {{authorization}}
 
 {
   "name": "my-custom-model",
@@ -47,6 +54,7 @@ Content-Type: application/json
 ### Copy model
 POST {{baseUrl}}/api/copy
 Content-Type: application/json
+Authorization: {{authorization}}
 
 {
   "source": "{{model}}",
@@ -56,6 +64,7 @@ Content-Type: application/json
 ### Delete model
 DELETE {{baseUrl}}/api/delete
 Content-Type: application/json
+Authorization: {{authorization}}
 
 {
   "name": "llama3.1-copy"
@@ -64,6 +73,7 @@ Content-Type: application/json
 ### Generate text (non-streaming)
 POST {{baseUrl}}/api/generate
 Content-Type: application/json
+Authorization: {{authorization}}
 
 {
   "model": "{{model}}",
@@ -74,6 +84,7 @@ Content-Type: application/json
 ### Quick response: hello
 POST {{baseUrl}}/api/generate
 Content-Type: application/json
+Authorization: {{authorization}}
 
 {
   "model": "{{model}}",
@@ -87,6 +98,7 @@ Content-Type: application/json
 ### Quick response: simple question
 POST {{baseUrl}}/api/generate
 Content-Type: application/json
+Authorization: {{authorization}}
 
 {
   "model": "{{model}}",
@@ -100,6 +112,7 @@ Content-Type: application/json
 ### Generate text (streaming)
 POST {{baseUrl}}/api/generate
 Content-Type: application/json
+Authorization: {{authorization}}
 
 {
   "model": "{{model}}",
@@ -110,6 +123,7 @@ Content-Type: application/json
 ### Chat completion (non-streaming)
 POST {{baseUrl}}/api/chat
 Content-Type: application/json
+Authorization: {{authorization}}
 
 {
   "model": "{{model}}",
@@ -123,6 +137,7 @@ Content-Type: application/json
 ### Quick chat response
 POST {{baseUrl}}/api/chat
 Content-Type: application/json
+Authorization: {{authorization}}
 
 {
   "model": "{{model}}",
@@ -138,6 +153,7 @@ Content-Type: application/json
 ### Chat completion (streaming)
 POST {{baseUrl}}/api/chat
 Content-Type: application/json
+Authorization: {{authorization}}
 
 {
   "model": "{{model}}",
@@ -150,6 +166,7 @@ Content-Type: application/json
 ### Embeddings (single input)
 POST {{baseUrl}}/api/embeddings
 Content-Type: application/json
+Authorization: {{authorization}}
 
 {
   "model": "{{model}}",
@@ -159,6 +176,7 @@ Content-Type: application/json
 ### Embeddings (batch input)
 POST {{baseUrl}}/api/embed
 Content-Type: application/json
+Authorization: {{authorization}}
 
 {
   "model": "{{model}}",
@@ -170,6 +188,8 @@ Content-Type: application/json
 
 ### List running models
 GET {{baseUrl}}/api/ps
+Authorization: {{authorization}}
 
 ### Raw REST API docs endpoint (if enabled by your Ollama version/build)
 GET {{baseUrl}}/api
+Authorization: {{authorization}}

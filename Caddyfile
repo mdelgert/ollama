@@ -1,0 +1,11 @@
+:11434 {
+    @authorized header Authorization "Bearer {$OLLAMA_API_KEY}"
+
+    handle @authorized {
+        reverse_proxy ollama:11434
+    }
+
+    handle {
+        respond "Unauthorized" 401
+    }
+}

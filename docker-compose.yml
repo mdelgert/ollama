@@ -3,8 +3,6 @@ services:
     image: ollama/ollama:0.32.14
     container_name: ollama
     restart: unless-stopped
-    ports:
-      - "11434:11434"
     environment:
       OLLAMA_HOST: 0.0.0.0
       OLLAMA_KEEP_ALIVE: 30m
@@ -26,6 +24,20 @@ services:
               count: all
               driver: nvidia
     runtime: nvidia
+
+    auth-proxy:
+      image: caddy:2-alpine
+      container_name: ollama-auth-proxy
+      restart: unless-stopped
+      ports:
+        - "11434:11434"
+      environment:
+        OLLAMA_API_KEY: ${OLLAMA_API_KEY:?Set OLLAMA_API_KEY in .env}
+      volumes:
+        - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      depends_on:
+        ollama:
+          condition: service_healthy
 
 volumes:
   ollama-data:
